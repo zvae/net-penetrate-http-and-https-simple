@@ -6,8 +6,7 @@ import lombok.Data;
 
 @Data
 @SuppressWarnings("unused")
-public class VersionInfo
-{
+public class VersionInfo {
     private String version;
     private JSONArray contents;
 }

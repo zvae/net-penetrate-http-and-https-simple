@@ -11,11 +11,11 @@
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
-        <netty-all.version>4.1.75.Final</netty-all.version>
-        <fastjson.version>1.2.79</fastjson.version>
+        <netty-all.version>4.1.82.Final</netty-all.version>
+        <fastjson.version>1.2.83</fastjson.version>
         <lombok.version>1.18.0</lombok.version>
-        <logback-classic.version>1.2.7</logback-classic.version>
-        <okhttp.version>4.9.2</okhttp.version>
+        <logback-classic.version>1.4.1</logback-classic.version>
+        <okhttp.version>4.10.0</okhttp.version>
     </properties>
 
     <!--依赖管理标签进行版本锁定-->

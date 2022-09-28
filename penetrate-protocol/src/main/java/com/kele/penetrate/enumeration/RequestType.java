@@ -3,8 +3,7 @@ package com.kele.penetrate.enumeration;
 import java.io.Serializable;
 
 @SuppressWarnings("unused")
-public enum RequestType implements Serializable
-{
+public enum RequestType implements Serializable {
     GET("GET"),
     POST("POST"),
     PUT("PUT"),
@@ -24,22 +23,17 @@ public enum RequestType implements Serializable
     CONNECT("CONNECT");
     public final String code;
 
-    RequestType(String code)
-    {
+    RequestType(String code) {
         this.code = code;
     }
 
-    public static RequestType getRequestTypeByCodeStr(String codeStr)
-    {
-        if (codeStr == null)
-        {
+    public static RequestType getRequestTypeByCodeStr(String codeStr) {
+        if (codeStr == null) {
             return null;
         }
         RequestType[] values = RequestType.values();
-        for (RequestType type : values)
-        {
-            if (type.code.equals(codeStr))
-            {
+        for (RequestType type : values) {
+            if (type.code.equals(codeStr)) {
                 return type;
             }
         }

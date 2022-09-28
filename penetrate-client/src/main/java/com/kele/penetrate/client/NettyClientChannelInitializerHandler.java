@@ -14,14 +14,12 @@ import java.util.concurrent.TimeUnit;
 
 @SuppressWarnings("unused")
 @Recognizer
-public class NettyClientChannelInitializerHandler extends ChannelInitializer<NioSocketChannel>
-{
+public class NettyClientChannelInitializerHandler extends ChannelInitializer<NioSocketChannel> {
     @Autowired
     private ClientHandler clientHandler;
 
     @Override
-    protected void initChannel(NioSocketChannel ch)
-    {
+    protected void initChannel(NioSocketChannel ch) {
         ch.pipeline().addLast(new ObjectEncoder());
         ch.pipeline().addLast(new ObjectDecoder(Integer.MAX_VALUE, ClassResolvers.weakCachingConcurrentResolver(null))); // 最大长度
         ch.pipeline().addLast(new IdleStateHandler(5, 5, 5, TimeUnit.MINUTES));

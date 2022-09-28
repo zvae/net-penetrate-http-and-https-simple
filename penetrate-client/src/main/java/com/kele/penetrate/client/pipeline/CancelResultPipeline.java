@@ -11,18 +11,15 @@ import com.kele.penetrate.utils.Func;
 @Register
 @Recognizer
 @SuppressWarnings("unused")
-public class CancelResultPipeline implements Func<Object, Boolean>
-{
+public class CancelResultPipeline implements Func<Object, Boolean> {
     @Autowired
     private ClientLogPageManager clientLogPageManager;
     @Autowired
     private MainFrame mainFrame;
 
     @Override
-    public Boolean func(Object msg)
-    {
-        if (msg instanceof CancelResult)
-        {
+    public Boolean func(Object msg) {
+        if (msg instanceof CancelResult) {
             clientLogPageManager.addLog("已暂停");
             mainFrame.getRunButton().setText("启动");
             mainFrame.setAllEditable(true);

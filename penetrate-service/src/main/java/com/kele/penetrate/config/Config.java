@@ -16,16 +16,14 @@ import java.util.Properties;
 @Data
 @Recognizer
 @SuppressWarnings("unused")
-public class Config
-{
+public class Config {
     private int startPort;
     private int httpPort;
     private int httpsPort;
     private VersionInfo versionInfo = new VersionInfo();
     private MySSL mySSL = new MySSL();
 
-    public Config() throws IOException
-    {
+    public Config() throws IOException {
 
         Properties properties = new Properties();
         properties.load(new BufferedReader(new InputStreamReader(Objects.requireNonNull(Config.class.getClassLoader().getResourceAsStream("config.properties")))));

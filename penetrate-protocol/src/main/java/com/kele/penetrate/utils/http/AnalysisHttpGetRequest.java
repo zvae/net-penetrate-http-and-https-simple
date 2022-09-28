@@ -8,7 +8,6 @@ import com.kele.penetrate.factory.annotation.Recognizer;
  */
 @SuppressWarnings("unused")
 @Recognizer
-public class AnalysisHttpGetRequest extends AnalysisRequest
-{
+public class AnalysisHttpGetRequest extends AnalysisRequest {
 
 }

@@ -13,15 +13,13 @@ import java.util.concurrent.TimeUnit;
 
 @SuppressWarnings("unused")
 @Recognizer
-public class NettyServiceChannelInitializerHandler extends ChannelInitializer<SocketChannel>
-{
+public class NettyServiceChannelInitializerHandler extends ChannelInitializer<SocketChannel> {
 
     @Autowired
     private ServiceHandler serviceHandler;
 
     @Override
-    protected void initChannel(SocketChannel socketChannel)
-    {
+    protected void initChannel(SocketChannel socketChannel) {
         socketChannel.pipeline().addLast(new ObjectDecoder(Integer.MAX_VALUE, ClassResolvers.weakCachingConcurrentResolver(null)));
         socketChannel.pipeline().addLast(new ObjectEncoder());
         socketChannel.pipeline().addLast(new IdleStateHandler(5, 5, 5, TimeUnit.MINUTES));

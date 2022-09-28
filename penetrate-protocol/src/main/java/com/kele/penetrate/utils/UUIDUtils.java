@@ -6,10 +6,8 @@ import java.util.UUID;
 
 @Recognizer
 @SuppressWarnings("unused")
-public class UUIDUtils
-{
-    public String getUUID()
-    {
+public class UUIDUtils {
+    public String getUUID() {
         return UUID.randomUUID().toString().replace("-", "");
     }
 
@@ -20,12 +18,10 @@ public class UUIDUtils
             "6", "7", "8", "9"};
 
 
-    public String generateShortUUID()
-    {
+    public String generateShortUUID() {
         StringBuilder shortBuffer = new StringBuilder();
         String uuid = getUUID();
-        for (int i = 0; i < 8; i++)
-        {
+        for (int i = 0; i < 8; i++) {
             String str = uuid.substring(i * 4, i * 4 + 4);
             int x = Integer.parseInt(str, 16);
             shortBuffer.append(chars[x % chars.length]);

@@ -9,6 +9,5 @@ import java.io.Serializable;
  */
 @Data
 @SuppressWarnings("unused")
-public class Heartbeat implements Serializable
-{
+public class Heartbeat implements Serializable {
 }

@@ -27,8 +27,7 @@ import java.util.Map;
 @Recognizer
 @Slf4j
 @SuppressWarnings("unused")
-public class BodyRequestHandle
-{
+public class BodyRequestHandle {
     @Autowired
     private UUIDUtils uuidUtils;
     @Autowired
@@ -38,23 +37,19 @@ public class BodyRequestHandle
     @Autowired
     private AnalysisHttpPostRequest analysisHttpPostRequest;
 
-    public boolean handle(PipelineTransmission pipelineTransmission)
-    {
+    public boolean handle(PipelineTransmission pipelineTransmission) {
         FullHttpRequest fullHttpRequest = pipelineTransmission.getFullHttpRequest();
         ChannelHandlerContext channelHandlerContext = pipelineTransmission.getChannelHandlerContext();
         HypertextTransferProtocolType hypertextTransferProtocolType = pipelineTransmission.getHypertextTransferProtocolType();
         RequestType requestType = analysisHttpPostRequest.getRequestType(fullHttpRequest);
 
-        if (requestType == RequestType.POST || requestType == RequestType.PUT || requestType == RequestType.PATCH || requestType == RequestType.DELETE)
-        {
+        if (requestType == RequestType.POST || requestType == RequestType.PUT || requestType == RequestType.PATCH || requestType == RequestType.DELETE) {
             Map<String, String> requestHeaders = analysisHttpPostRequest.getRequestHeaders(fullHttpRequest);
             String host = analysisHttpPostRequest.getHost(fullHttpRequest);
             String contentType = fullHttpRequest.headers().get("Content-Type");
             ConnectHandler connectHandler = connectManager.get(host);
-            if (connectHandler != null)
-            {
-                if (contentType == null)
-                {
+            if (connectHandler != null) {
+                if (contentType == null) {
                     RequestNotBody requestNotBody = new RequestNotBody();
                     requestNotBody.setRequestId(uuidUtils.getUUID());
                     requestNotBody.setRequestProtocolType(hypertextTransferProtocolType);
@@ -63,12 +58,9 @@ public class BodyRequestHandle
                     requestNotBody.setRequestType(requestType);
                     connectManager.addRecordMessage(requestNotBody, channelHandlerContext);
                     connectHandler.reply(requestNotBody);
-                }
-                else
-                {
+                } else {
                     //<editor-fold desc="处理 x-www-form-urlencoded">
-                    if (contentType.contains(RequestContentType.X_WWW_FORM_URLENCODED.code))
-                    {
+                    if (contentType.contains(RequestContentType.X_WWW_FORM_URLENCODED.code)) {
                         RequestFormBody requestFormBody = new RequestFormBody();
                         requestFormBody.setRequestType(requestType);
                         requestFormBody.setRequestId(uuidUtils.getUUID());
@@ -83,8 +75,7 @@ public class BodyRequestHandle
                     //</editor-fold>
 
                     //<editor-fold desc="处理 multipart/form-data">
-                    else if (contentType.contains(RequestContentType.MULTIPART_FORM_DATA.code))
-                    {
+                    else if (contentType.contains(RequestContentType.MULTIPART_FORM_DATA.code)) {
                         RequestMultipartBody requestMultipartBody = new RequestMultipartBody();
                         requestMultipartBody.setRequestId(uuidUtils.getUUID());
                         requestMultipartBody.setRequestType(requestType);
@@ -105,8 +96,7 @@ public class BodyRequestHandle
                             contentType.contains(RequestContentType.APPLICATION_JAVASCRIPT.code) ||
                             contentType.contains(RequestContentType.APPLICATION_XML.code) ||
                             contentType.contains(RequestContentType.TEXT_PLAIN.code)
-                    )
-                    {
+                    ) {
                         RequestTextBody requestTextBody = new RequestTextBody();
                         requestTextBody.setRequestId(uuidUtils.getUUID());
                         requestTextBody.setRequestType(requestType);
@@ -120,16 +110,13 @@ public class BodyRequestHandle
                     //</editor-fold>
 
                     //<editor-fold desc="无法处理的 Content-Type">
-                    else
-                    {
+                    else {
                         log.error("无法处理的Content-Type：{}", contentType);
                         channelHandlerContext.writeAndFlush(pageTemplate.get_UnableProcess_Template()).addListener(ChannelFutureListener.CLOSE);
                     }
                     //</editor-fold>
                 }
-            }
-            else
-            {
+            } else {
                 FullHttpResponse serviceUnavailableTemplate = pageTemplate.get_NotFound_Template();
                 channelHandlerContext.writeAndFlush(serviceUnavailableTemplate).addListener(ChannelFutureListener.CLOSE);
             }

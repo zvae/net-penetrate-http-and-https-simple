@@ -13,14 +13,12 @@ import lombok.extern.slf4j.Slf4j;
 @SuppressWarnings("unused")
 @Slf4j
 @Recognizer
-public class PatchPipeline implements Func<PipelineTransmission, Boolean>
-{
+public class PatchPipeline implements Func<PipelineTransmission, Boolean> {
     @Autowired
     private BodyRequestHandle bodyRequestHandle;
 
     @Override
-    public Boolean func(PipelineTransmission pipelineTransmission)
-    {
+    public Boolean func(PipelineTransmission pipelineTransmission) {
         // POST | DELETE | PUT | PATCH 几个的处理方法一样，暂时不统一处理，防止以后变化方便分开处理
         return bodyRequestHandle.handle(pipelineTransmission);
     }

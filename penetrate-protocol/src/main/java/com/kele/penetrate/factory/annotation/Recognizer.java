@@ -8,6 +8,5 @@ import java.lang.annotation.Target;
 @SuppressWarnings("unused")
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Recognizer
-{
+public @interface Recognizer {
 }

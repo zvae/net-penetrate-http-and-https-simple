@@ -18,8 +18,7 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @Recognizer
 @SuppressWarnings("unused")
-public class ConnectHandler
-{
+public class ConnectHandler {
     //<editor-fold desc="属性">
     private Bootstrap bootstrap;
     private Channel channel;
@@ -37,8 +36,7 @@ public class ConnectHandler
     //</editor-fold>
 
     //<editor-fold desc="启动">
-    public void start()
-    {
+    public void start() {
         bootstrap = new Bootstrap();
         EventLoopGroup group = new NioEventLoopGroup();
 
@@ -51,22 +49,18 @@ public class ConnectHandler
     //</editor-fold>
 
     //<editor-fold desc="连接">
-    protected void doConnect()
-    {
+    protected void doConnect() {
         if (this.channel != null && this.channel.isActive())
             return;
         ChannelFuture future = bootstrap.connect(config.getServiceConnectInfo().getIp(), config.getServiceConnectInfo().getPort());
 
         future.addListener((ChannelFutureListener) futureListener ->
         {
-            if (futureListener.isSuccess())
-            {
+            if (futureListener.isSuccess()) {
                 setChannel(future.channel());
                 clientLogPageManager.addLog("连接成功");
                 log.info("与服务器连接成功：{} : {}", config.getServiceConnectInfo().getIp(), config.getServiceConnectInfo().getPort());
-            }
-            else
-            {
+            } else {
                 clientLogPageManager.addLog("5秒后自动重连...");
                 log.info("5秒后自动重连：{} : {}", config.getServiceConnectInfo().getIp(), config.getServiceConnectInfo().getPort());
                 futureListener.channel().eventLoop().schedule(this::doConnect, 5, TimeUnit.SECONDS);
@@ -76,10 +70,8 @@ public class ConnectHandler
     //</editor-fold>
 
     //<editor-fold desc="是否连接成功">
-    public boolean isConnect()
-    {
-        if (channel == null)
-        {
+    public boolean isConnect() {
+        if (channel == null) {
             return false;
         }
         return channel.isActive();
@@ -87,8 +79,7 @@ public class ConnectHandler
     //</editor-fold>
 
     //<editor-fold desc="连接断开处理">
-    public void disconnect()
-    {
+    public void disconnect() {
         log.info("连接断开");
         clientLogPageManager.addLog("连接断开(自动重联～)");
         setChannel(null);
@@ -97,8 +88,7 @@ public class ConnectHandler
     //</editor-fold>
 
     //<editor-fold desc="发送消息">
-    public void send(Object msg)
-    {
+    public void send(Object msg) {
         if (this.channel == null || !this.channel.isActive())
             return;
         this.channel.writeAndFlush(msg);

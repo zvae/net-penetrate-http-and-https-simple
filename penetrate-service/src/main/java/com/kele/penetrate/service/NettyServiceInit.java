@@ -13,20 +13,17 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Recognizer
 @SuppressWarnings("unused")
-public class NettyServiceInit extends Thread
-{
+public class NettyServiceInit extends Thread {
     @Autowired
     private Config config;
     @Autowired
     private NettyServiceChannelInitializerHandler nettyServiceChannelInitializerHandler;
 
     @Override
-    public void run()
-    {
+    public void run() {
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         EventLoopGroup bossGroup = new NioEventLoopGroup();
-        try
-        {
+        try {
             ServerBootstrap server = new ServerBootstrap();
             server.group(bossGroup, workerGroup)
                     .channel(NioServerSocketChannel.class)
@@ -35,13 +32,9 @@ public class NettyServiceInit extends Thread
             ChannelFuture future = server.bind(config.getStartPort()).sync();
             log.info("服务器启动成功: {}", config.getStartPort());
             future.channel().closeFuture().sync();
-        }
-        catch (Exception ex)
-        {
+        } catch (Exception ex) {
             log.error("服务器启动失败", ex);
-        }
-        finally
-        {
+        } finally {
             bossGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();
         }

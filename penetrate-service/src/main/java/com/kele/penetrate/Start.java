@@ -19,8 +19,7 @@ import java.util.TimerTask;
 
 @SuppressWarnings("unused")
 @Recognizer
-public class Start
-{
+public class Start {
     private static final BeanFactoryImpl beanFactory;
     public static final Events<PipelineTransmission> hypertextProtocolEvents;
     public static final Events<ServicePipeline> serviceEvents;
@@ -36,8 +35,7 @@ public class Start
     private ConnectManager connectManager;
 
     //<editor-fold desc="初始化">
-    static
-    {
+    static {
         BeanFactoryImpl.setBean(new Timer());
         beanFactory = BeanFactoryImpl.getInstance("com.kele.penetrate");
         start = BeanFactoryImpl.getBean(Start.class);
@@ -47,13 +45,10 @@ public class Start
     //</editor-fold>
 
     //<editor-fold desc="心跳">
-    public void heartbeat()
-    {
-        BeanFactoryImpl.getBean(Timer.class).schedule(new TimerTask()
-        {
+    public void heartbeat() {
+        BeanFactoryImpl.getBean(Timer.class).schedule(new TimerTask() {
             @SneakyThrows
-            public void run()
-            {
+            public void run() {
                 connectManager.replyAll(new Heartbeat());
             }
         }, 1000 * 30, 1000 * 30);
@@ -61,21 +56,17 @@ public class Start
     //</editor-fold>
 
     //<editor-fold desc="清理未处理的消息">
-    public void clearUntreatedMsg()
-    {
-        BeanFactoryImpl.getBean(Timer.class).schedule(new TimerTask()
-        {
+    public void clearUntreatedMsg() {
+        BeanFactoryImpl.getBean(Timer.class).schedule(new TimerTask() {
             @SneakyThrows
-            public void run()
-            {
+            public void run() {
                 connectManager.clearUntreatedMessage();
             }
         }, 1000 * 60, 1000 * 60);
     }
     //</editor-fold>
 
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         Start start = BeanFactoryImpl.getBean(Start.class);
         start.nettyHttpService.start();
         start.nettyHttpsService.start();

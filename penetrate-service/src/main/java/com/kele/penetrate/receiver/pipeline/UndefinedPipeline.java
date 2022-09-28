@@ -12,14 +12,12 @@ import io.netty.handler.codec.http.FullHttpResponse;
 @Register(-1)
 @SuppressWarnings("unused")
 @Recognizer
-public class UndefinedPipeline implements Func<PipelineTransmission, Boolean>
-{
+public class UndefinedPipeline implements Func<PipelineTransmission, Boolean> {
     @Autowired
     private PageTemplate pageTemplate;
 
     @Override
-    public Boolean func(PipelineTransmission pipelineTransmission)
-    {
+    public Boolean func(PipelineTransmission pipelineTransmission) {
         FullHttpResponse serviceUnavailableTemplate = pageTemplate.get_ServiceUnavailable_Template();
         pipelineTransmission.getChannelHandlerContext().writeAndFlush(serviceUnavailableTemplate).addListener(ChannelFutureListener.CLOSE);
         return true;

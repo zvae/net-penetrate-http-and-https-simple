@@ -12,8 +12,7 @@ import java.util.List;
  */
 @Recognizer
 @SuppressWarnings("unused")
-public class ClientLogPageManager
-{
+public class ClientLogPageManager {
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private static final List<LogInfo> logList = new ArrayList<>();
     private static final int logNumber = 100;
@@ -22,56 +21,45 @@ public class ClientLogPageManager
     private MainFrame mainFrame;
 
     //<editor-fold desc="內部消息封装类">
-    static class LogInfo
-    {
+    static class LogInfo {
         private String time;
         private String msg;
 
-        public LogInfo(String time, String msg)
-        {
+        public LogInfo(String time, String msg) {
             this.time = time;
             this.msg = msg;
         }
 
-        public String getTime()
-        {
+        public String getTime() {
             return time;
         }
 
-        public void setTime(String time)
-        {
+        public void setTime(String time) {
             this.time = time;
         }
 
-        public String getMsg()
-        {
+        public String getMsg() {
             return msg;
         }
 
-        public void setMsg(String msg)
-        {
+        public void setMsg(String msg) {
             this.msg = msg;
         }
     }
     //</editor-fold>
 
     //<editor-fold desc="添加日志">
-    public synchronized void addLog(String log)
-    {
-        if (logList.size() > logNumber)
-        {
+    public synchronized void addLog(String log) {
+        if (logList.size() > logNumber) {
             logList.remove(0);
         }
         logList.add(new LogInfo(sdf.format(System.currentTimeMillis()), log));
         mainFrame.setLogTextArea(logList);
     }
 
-    public void addLog(List<String> logs)
-    {
-        if (logs != null)
-        {
-            for (String log : logs)
-            {
+    public void addLog(List<String> logs) {
+        if (logs != null) {
+            for (String log : logs) {
                 addLog(log);
             }
         }
@@ -79,8 +67,7 @@ public class ClientLogPageManager
     //</editor-fold>
 
     //<editor-fold desc="清空日志">
-    public synchronized void clear()
-    {
+    public synchronized void clear() {
         logList.clear();
         mainFrame.setLogTextArea(logList);
     }

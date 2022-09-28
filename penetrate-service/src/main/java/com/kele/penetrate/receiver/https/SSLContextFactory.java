@@ -12,15 +12,13 @@ import java.security.KeyStore;
 
 @Recognizer
 @SuppressWarnings("unused")
-public class SSLContextFactory
-{
+public class SSLContextFactory {
     @Autowired
     private FileUtils fileUtils;
     @Autowired
     private Config config;
 
-    public SSLContext getSslContext() throws Exception
-    {
+    public SSLContext getSslContext() throws Exception {
         char[] passArray = config.getMySSL().getPassword().toCharArray();
         SSLContext sslContext = SSLContext.getInstance("SSLv3");
         KeyStore ks = KeyStore.getInstance("JKS");

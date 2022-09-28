@@ -12,8 +12,7 @@ import com.kele.penetrate.utils.HttpUtils;
 @Register
 @Recognizer
 @SuppressWarnings("unused")
-public class RequestFormBodyPipeline implements Func<Object, Boolean>
-{
+public class RequestFormBodyPipeline implements Func<Object, Boolean> {
     @Autowired
     private ConnectHandler connectHandler;
     @Autowired
@@ -22,10 +21,8 @@ public class RequestFormBodyPipeline implements Func<Object, Boolean>
     private MainFrame mainFrame;
 
     @Override
-    public Boolean func(Object msg)
-    {
-        if (msg instanceof RequestFormBody)
-        {
+    public Boolean func(Object msg) {
+        if (msg instanceof RequestFormBody) {
             RequestFormBody requestFormBody = (RequestFormBody) msg;
             String requestUrl = requestFormBody.getRequestProtocolType().code + "://" + mainFrame.getIp() + ":" + mainFrame.getPort() + "" + requestFormBody.getRequestUri();
 

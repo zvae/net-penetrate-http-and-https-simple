@@ -5,19 +5,19 @@ import com.kele.penetrate.factory.annotation.Autowired;
 import com.kele.penetrate.factory.annotation.Recognizer;
 
 import javax.swing.*;
-import java.awt.event.*;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 @Recognizer
 @SuppressWarnings("unused")
-public class TextAreaMenu extends JTextArea
-{
+public class TextAreaMenu extends JTextArea {
     @Autowired
     private ClientLogPageManager clientLogPageManager;
     @Autowired
     private Config config;
 
-    public TextAreaMenu()
-    {
+    public TextAreaMenu() {
         JPopupMenu menu = new JPopupMenu();
         menu.add(createMenuItem("版本", actionEvent ->
                 clientLogPageManager.addLog("当前版本：" + config.getVersion())));
@@ -29,15 +29,12 @@ public class TextAreaMenu extends JTextArea
                 clientLogPageManager.clear()));
 
 
-        this.addMouseListener(new MouseAdapter()
-        {
+        this.addMouseListener(new MouseAdapter() {
             @Override
-            public void mousePressed(MouseEvent e)
-            {
+            public void mousePressed(MouseEvent e) {
                 // MouseEvent.BUTTON1:  左键点击
                 // MouseEvent.BUTTON2:  中间点击(滑轮)
-                if (e.getButton() == MouseEvent.BUTTON3)
-                {
+                if (e.getButton() == MouseEvent.BUTTON3) {
                     // 设置右键点击事件,打开邮件菜单
                     menu.show(TextAreaMenu.this, e.getX(), e.getY());
                 }
@@ -53,8 +50,7 @@ public class TextAreaMenu extends JTextArea
      * @param actionListener 触发的事件
      * @return MenuItem
      */
-    private JMenuItem createMenuItem(String label, ActionListener actionListener)
-    {
+    private JMenuItem createMenuItem(String label, ActionListener actionListener) {
         JMenuItem menu = new JMenuItem(label);
         menu.addActionListener(actionListener);
         return menu;

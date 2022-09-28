@@ -9,13 +9,15 @@ import com.kele.penetrate.pojo.PipelineTransmission;
 import com.kele.penetrate.protocol.RequestNotBody;
 import com.kele.penetrate.service.ConnectHandler;
 import com.kele.penetrate.service.ConnectManager;
-import com.kele.penetrate.utils.UUIDUtils;
-import com.kele.penetrate.utils.http.AnalysisHttpGetRequest;
 import com.kele.penetrate.utils.Func;
 import com.kele.penetrate.utils.PageTemplate;
+import com.kele.penetrate.utils.UUIDUtils;
+import com.kele.penetrate.utils.http.AnalysisHttpGetRequest;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.http.*;
+import io.netty.handler.codec.http.FullHttpRequest;
+import io.netty.handler.codec.http.FullHttpResponse;
+import io.netty.handler.codec.http.HttpHeaders;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
@@ -27,8 +29,7 @@ import java.util.Map;
 @Register
 @Recognizer
 @SuppressWarnings("unused")
-public class GetPipeline implements Func<PipelineTransmission, Boolean>
-{
+public class GetPipeline implements Func<PipelineTransmission, Boolean> {
 
     @Autowired
     private ConnectManager connectManager;
@@ -40,34 +41,25 @@ public class GetPipeline implements Func<PipelineTransmission, Boolean>
     private AnalysisHttpGetRequest analysisHttpGetRequest;
 
     @Override
-    public Boolean func(PipelineTransmission pipelineTransmission)
-    {
+    public Boolean func(PipelineTransmission pipelineTransmission) {
         FullHttpRequest fullHttpRequest = pipelineTransmission.getFullHttpRequest();
         ChannelHandlerContext channelHandlerContext = pipelineTransmission.getChannelHandlerContext();
         HypertextTransferProtocolType hypertextTransferProtocolType = pipelineTransmission.getHypertextTransferProtocolType();
 
-        if (analysisHttpGetRequest.getRequestType(fullHttpRequest) == RequestType.GET)
-        {
+        if (analysisHttpGetRequest.getRequestType(fullHttpRequest) == RequestType.GET) {
             HttpHeaders headers = fullHttpRequest.headers();
             String contentType = headers.get("Content-Type");
-            if (contentType != null)
-            {
+            if (contentType != null) {
                 log.error("get 不支持携带请求体");
                 channelHandlerContext.writeAndFlush(pageTemplate.get_GetBodyAccessDenied_Template()).addListener(ChannelFutureListener.CLOSE);
-            }
-            else
-            {
+            } else {
                 Map<String, String> requestHeaders = analysisHttpGetRequest.getRequestHeaders(fullHttpRequest);
                 String host = analysisHttpGetRequest.getHost(fullHttpRequest);
-                if (host == null || !connectManager.isExist(host))
-                {
+                if (host == null || !connectManager.isExist(host)) {
                     channelHandlerContext.writeAndFlush(pageTemplate.get_NotFound_Template()).addListener(ChannelFutureListener.CLOSE);
-                }
-                else
-                {
+                } else {
                     ConnectHandler connectHandler = connectManager.get(host);
-                    if (connectHandler != null)
-                    {
+                    if (connectHandler != null) {
                         RequestNotBody requestNotBody = new RequestNotBody();
                         requestNotBody.setRequestId(uuidUtils.getUUID());
                         requestNotBody.setRequestProtocolType(hypertextTransferProtocolType);
@@ -77,9 +69,7 @@ public class GetPipeline implements Func<PipelineTransmission, Boolean>
 
                         connectManager.addRecordMessage(requestNotBody, channelHandlerContext);
                         connectHandler.reply(requestNotBody);
-                    }
-                    else
-                    {
+                    } else {
                         FullHttpResponse serviceUnavailableTemplate = pageTemplate.get_NotFound_Template();
                         channelHandlerContext.writeAndFlush(serviceUnavailableTemplate).addListener(ChannelFutureListener.CLOSE);
                     }

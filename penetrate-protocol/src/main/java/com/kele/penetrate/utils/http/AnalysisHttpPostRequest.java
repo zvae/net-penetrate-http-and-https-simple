@@ -21,20 +21,16 @@ import java.util.Map;
 @SuppressWarnings("unused")
 @Slf4j
 @Recognizer
-public class AnalysisHttpPostRequest extends AnalysisRequest
-{
+public class AnalysisHttpPostRequest extends AnalysisRequest {
 
     //<editor-fold desc="获取请求体 x-www-form-urlencoded">
-    public Map<String, String> getFormBody(FullHttpRequest fullHttpRequest)
-    {
+    public Map<String, String> getFormBody(FullHttpRequest fullHttpRequest) {
         Map<String, String> body = new HashMap<>();
         HttpDataFactory factory = new DefaultHttpDataFactory(false);
         HttpPostRequestDecoder decoder = new HttpPostRequestDecoder(factory, fullHttpRequest);
         List<InterfaceHttpData> postData = decoder.getBodyHttpDatas();
-        for (InterfaceHttpData data : postData)
-        {
-            if (data.getHttpDataType() == InterfaceHttpData.HttpDataType.Attribute)
-            {
+        for (InterfaceHttpData data : postData) {
+            if (data.getHttpDataType() == InterfaceHttpData.HttpDataType.Attribute) {
                 MemoryAttribute attribute = (MemoryAttribute) data;
                 body.put(attribute.getName(), attribute.getValue());
             }
@@ -44,8 +40,7 @@ public class AnalysisHttpPostRequest extends AnalysisRequest
     //</editor-fold>
 
     //<editor-fold desc="获取请求体 multipart/form-data">
-    public MultipartBody getMultipartBody(FullHttpRequest fullHttpRequest)
-    {
+    public MultipartBody getMultipartBody(FullHttpRequest fullHttpRequest) {
         Map<String, String> bodyMap = new HashMap<>();
         List<RequestFile> bodyFiles = new ArrayList<>();
 
@@ -58,32 +53,23 @@ public class AnalysisHttpPostRequest extends AnalysisRequest
         httpDecoder.setDiscardThreshold(0);
         httpDecoder.offer(fullHttpRequest);
         List<InterfaceHttpData> interfaceHttpDataList = httpDecoder.getBodyHttpDatas();
-        for (InterfaceHttpData data : interfaceHttpDataList)
-        {
-            if (data.getHttpDataType() == InterfaceHttpData.HttpDataType.Attribute)
-            {
+        for (InterfaceHttpData data : interfaceHttpDataList) {
+            if (data.getHttpDataType() == InterfaceHttpData.HttpDataType.Attribute) {
                 Attribute attribute = (Attribute) data;
-                try
-                {
+                try {
                     bodyMap.put(attribute.getName(), attribute.getValue());
-                }
-                catch (IOException e)
-                {
+                } catch (IOException e) {
                     log.error("获取请求属性错误", e);
                 }
             }
-            if (data.getHttpDataType() == InterfaceHttpData.HttpDataType.FileUpload)
-            {
+            if (data.getHttpDataType() == InterfaceHttpData.HttpDataType.FileUpload) {
                 FileUpload fileUpload = (FileUpload) data;
                 RequestFile requestFile = new RequestFile();
-                try
-                {
+                try {
                     requestFile.setFileByte(fileUpload.get());
                     requestFile.setFileName(fileUpload.getFilename());
                     requestFile.setName(fileUpload.getName());
-                }
-                catch (IOException e)
-                {
+                } catch (IOException e) {
                     log.error("获取文件异常", e);
                 }
                 bodyFiles.add(requestFile);
@@ -95,8 +81,7 @@ public class AnalysisHttpPostRequest extends AnalysisRequest
     //</editor-fold>
 
     //<editor-fold desc="获取请求体 application(json xml javaScript),text(plain html)">
-    public String getTextBody(FullHttpRequest fullHttpRequest)
-    {
+    public String getTextBody(FullHttpRequest fullHttpRequest) {
         return fullHttpRequest.content().toString(CharsetUtil.UTF_8);
     }
     //</editor-fold>

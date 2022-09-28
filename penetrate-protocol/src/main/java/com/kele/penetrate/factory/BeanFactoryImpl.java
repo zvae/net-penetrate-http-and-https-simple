@@ -12,38 +12,30 @@ import java.util.Map;
 
 @Slf4j
 @SuppressWarnings("unused")
-public class BeanFactoryImpl
-{
+public class BeanFactoryImpl {
     private static BeanFactoryImpl beanFactory;
     private static String scanningPath;
     private static final Map<String, Object> beans = new HashMap<>();
 
-    public synchronized static BeanFactoryImpl getInstance(String scanning)
-    {
-        if (beanFactory == null)
-        {
+    public synchronized static BeanFactoryImpl getInstance(String scanning) {
+        if (beanFactory == null) {
             scanningPath = scanning;
             beanFactory = new BeanFactoryImpl();
         }
         return beanFactory;
     }
 
-    public BeanFactoryImpl()
-    {
+    public BeanFactoryImpl() {
         init();
     }
 
-    private void init()
-    {
-        try
-        {
+    private void init() {
+        try {
             List<Class<?>> classesByPackageName = ScanPackage.getClassesByPackageName(scanningPath);
             //<editor-fold desc="扫描所有Recognizer注解的类">
-            for (Class<?> clazz : classesByPackageName)
-            {
+            for (Class<?> clazz : classesByPackageName) {
                 Recognizer recognizer = clazz.getAnnotation(Recognizer.class);
-                if (recognizer == null)
-                {
+                if (recognizer == null) {
                     continue;
                 }
                 beans.put(clazz.getName(), clazz.newInstance());
@@ -51,15 +43,12 @@ public class BeanFactoryImpl
             //</editor-fold>
 
             //<editor-fold desc="注入属性">
-            for (Class<?> aClass : classesByPackageName)
-            {
+            for (Class<?> aClass : classesByPackageName) {
                 Object o = beans.get(aClass.getName());
                 Field[] declaredFields = aClass.getDeclaredFields();
-                for (Field field : declaredFields)
-                {
+                for (Field field : declaredFields) {
                     Autowired annotation = field.getAnnotation(Autowired.class);
-                    if (annotation == null)
-                    {
+                    if (annotation == null) {
                         continue;
                     }
                     field.setAccessible(true);
@@ -67,20 +56,16 @@ public class BeanFactoryImpl
                 }
             }
             //</editor-fold>
-        }
-        catch (Exception ex)
-        {
+        } catch (Exception ex) {
             log.error("注入扫描异常", ex);
         }
     }
 
-    public static <T> T getBean(Class<T> type)
-    {
+    public static <T> T getBean(Class<T> type) {
         return type.cast(beans.get(type.getName()));
     }
 
-    public static void setBean(Object o)
-    {
+    public static void setBean(Object o) {
         beans.put(o.getClass().getName(), o);
     }
 }

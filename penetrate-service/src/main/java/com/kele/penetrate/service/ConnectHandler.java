@@ -8,23 +8,20 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @SuppressWarnings("unused")
 @Data
-public class ConnectHandler
-{
+public class ConnectHandler {
     private ChannelHandlerContext ctx;
     private String customDomainName;
 
-    public ConnectHandler(ChannelHandlerContext ctx)
-    {
+    public ConnectHandler(ChannelHandlerContext ctx) {
         this.ctx = ctx;
     }
-    public void reply(Object msg)
-    {
+
+    public void reply(Object msg) {
         ctx.writeAndFlush(msg);
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "ConnectHandler{" +
                 "customDomainName='" + customDomainName + '\'' +
                 '}';

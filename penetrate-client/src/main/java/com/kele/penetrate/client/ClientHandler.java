@@ -18,8 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 @Recognizer
 @ChannelHandler.Sharable
 @SuppressWarnings("unused")
-public class ClientHandler extends SimpleChannelInboundHandler<Object>
-{
+public class ClientHandler extends SimpleChannelInboundHandler<Object> {
     //<editor-fold desc="注入">
     @Autowired
     private ConnectHandler connectHandler;
@@ -36,26 +35,20 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object>
 
     //<editor-fold desc="接收通道消息">
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, Object msg)
-    {
+    protected void channelRead0(ChannelHandlerContext ctx, Object msg) {
         Start.clientEvents.notice(msg);
     }
     //</editor-fold>
 
     //<editor-fold desc="通道连接激活">
     @Override
-    public void channelActive(ChannelHandlerContext ctx)
-    {
+    public void channelActive(ChannelHandlerContext ctx) {
         connectHandler.setChannel(ctx.channel());
-        if (isFirst && mainFrame.isAutoStart())
-        {
+        if (isFirst && mainFrame.isAutoStart()) {
             isFirst = false;
             mainFrame.startButtonClickHandle(null);
-        }
-        else
-        {
-            if (connectHandler.getHandshake() != null)
-            {
+        } else {
+            if (connectHandler.getHandshake() != null) {
                 connectHandler.send(connectHandler.getHandshake());
             }
         }
@@ -64,16 +57,14 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object>
 
     //<editor-fold desc="通道断开">
     @Override
-    public void channelInactive(ChannelHandlerContext ctx)
-    {
+    public void channelInactive(ChannelHandlerContext ctx) {
         connectHandler.disconnect();
     }
     //</editor-fold>
 
     //<editor-fold desc="长时间没有通信">
     @Override
-    public void userEventTriggered(ChannelHandlerContext ctx, Object evt)
-    {
+    public void userEventTriggered(ChannelHandlerContext ctx, Object evt) {
         ctx.flush();
         ctx.close();
     }

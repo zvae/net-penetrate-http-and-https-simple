@@ -8,8 +8,7 @@ import java.io.Serializable;
 import java.util.Map;
 
 @Data
-public class BaseRequest implements Serializable
-{
+public class BaseRequest implements Serializable {
     private String requestId;
     private HypertextTransferProtocolType requestProtocolType;
     private String requestUri;

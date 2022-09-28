@@ -12,8 +12,7 @@ import com.kele.penetrate.utils.HttpUtils;
 @Register
 @Recognizer
 @SuppressWarnings("unused")
-public class RequestNotBodyPipeline implements Func<Object, Boolean>
-{
+public class RequestNotBodyPipeline implements Func<Object, Boolean> {
 
     @Autowired
     private ConnectHandler connectHandler;
@@ -23,10 +22,8 @@ public class RequestNotBodyPipeline implements Func<Object, Boolean>
     private MainFrame mainFrame;
 
     @Override
-    public Boolean func(Object msg)
-    {
-        if (msg instanceof RequestNotBody)
-        {
+    public Boolean func(Object msg) {
+        if (msg instanceof RequestNotBody) {
             RequestNotBody requestNotBody = (RequestNotBody) msg;
             String requestUrl = requestNotBody.getRequestProtocolType().code + "://" + mainFrame.getIp() + ":" + mainFrame.getPort() + "" + requestNotBody.getRequestUri();
 

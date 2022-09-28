@@ -7,14 +7,12 @@ import lombok.Data;
 
 @Data
 @SuppressWarnings("unused")
-public class PipelineTransmission
-{
+public class PipelineTransmission {
     private FullHttpRequest fullHttpRequest;
     private ChannelHandlerContext channelHandlerContext;
     private HypertextTransferProtocolType hypertextTransferProtocolType;
 
-    public PipelineTransmission(ChannelHandlerContext channelHandlerContext, FullHttpRequest fullHttpRequest, HypertextTransferProtocolType hypertextTransferProtocolType)
-    {
+    public PipelineTransmission(ChannelHandlerContext channelHandlerContext, FullHttpRequest fullHttpRequest, HypertextTransferProtocolType hypertextTransferProtocolType) {
         this.fullHttpRequest = fullHttpRequest;
         this.channelHandlerContext = channelHandlerContext;
         this.hypertextTransferProtocolType = hypertextTransferProtocolType;

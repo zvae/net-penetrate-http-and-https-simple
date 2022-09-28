@@ -10,8 +10,7 @@ import java.security.cert.X509Certificate;
 
 @Slf4j
 @SuppressWarnings("unused")
-public class SSLSocketClientUtil
-{
+public class SSLSocketClientUtil {
     public static SSLSocketFactory getSocketFactory(TrustManager manager) {
         SSLSocketFactory socketFactory = null;
         try {
@@ -27,14 +26,12 @@ public class SSLSocketClientUtil
     public static X509TrustManager getX509TrustManager() {
         return new X509TrustManager() {
             @Override
-            public void checkClientTrusted(X509Certificate[] chain, String authType)
-            {
+            public void checkClientTrusted(X509Certificate[] chain, String authType) {
 
             }
 
             @Override
-            public void checkServerTrusted(X509Certificate[] chain, String authType)
-            {
+            public void checkServerTrusted(X509Certificate[] chain, String authType) {
 
             }
 

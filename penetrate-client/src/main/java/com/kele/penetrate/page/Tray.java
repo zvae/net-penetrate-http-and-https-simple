@@ -15,26 +15,22 @@ import java.util.Objects;
 @Slf4j
 @Recognizer
 @SuppressWarnings("unused")
-public class Tray
-{
+public class Tray {
     public static final Image icon = new ImageIcon(Objects.requireNonNull(Tray.class.getResource("/icon.png"))).getImage();
 
     @Autowired
     private MainFrame mainFrame;
 
-    public Tray()
-    {
+    public Tray() {
         //检查系统是否支持托盘程序
-        if (SystemTray.isSupported())
-        {
+        if (SystemTray.isSupported()) {
             SystemTray tray = SystemTray.getSystemTray();
             PopupMenu popupMenu = new PopupMenu();
 
             //<editor-fold desc="打开">
             popupMenu.add(createMenuItem("open", e ->
             {
-                if (!mainFrame.isShowing())
-                {
+                if (!mainFrame.isShowing()) {
                     mainFrame.setVisible(true);
                 }
             }));
@@ -47,17 +43,12 @@ public class Tray
             //设置图标
             TrayIcon trayIcon = new TrayIcon(icon, "penetrate", popupMenu);
             trayIcon.setImageAutoSize(true);
-            try
-            {
+            try {
                 tray.add(trayIcon);
-            }
-            catch (AWTException e)
-            {
+            } catch (AWTException e) {
                 log.error("图标添加失败");
             }
-        }
-        else
-        {
+        } else {
             log.error("当前系统不支持托盘系统");
         }
     }
@@ -69,8 +60,7 @@ public class Tray
      * @param actionListener 触发的事件
      * @return MenuItem
      */
-    private MenuItem createMenuItem(String label, ActionListener actionListener)
-    {
+    private MenuItem createMenuItem(String label, ActionListener actionListener) {
         MenuItem menuItem = new MenuItem(label);
         menuItem.addActionListener(actionListener);
         return menuItem;

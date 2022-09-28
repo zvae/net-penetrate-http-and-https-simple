@@ -5,13 +5,11 @@ import lombok.Data;
 
 @Data
 @SuppressWarnings("unused")
-public class ServicePipeline
-{
+public class ServicePipeline {
     private Object msg;
     private ChannelHandlerContext channelHandlerContext;
 
-    public ServicePipeline(Object msg, ChannelHandlerContext channelHandlerContext)
-    {
+    public ServicePipeline(Object msg, ChannelHandlerContext channelHandlerContext) {
         this.msg = msg;
         this.channelHandlerContext = channelHandlerContext;
     }

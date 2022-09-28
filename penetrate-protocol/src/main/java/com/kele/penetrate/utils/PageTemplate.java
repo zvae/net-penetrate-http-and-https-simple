@@ -12,8 +12,7 @@ import java.nio.charset.StandardCharsets;
 
 @Recognizer
 @SuppressWarnings("unused")
-public class PageTemplate
-{
+public class PageTemplate {
 
     private static final String GET_BODY_ACCESS_DENIED = "403 Access Denied(GET请求不支持请求体)";
     private static final String NOT_FOUND = "404 Not Found";
@@ -21,28 +20,23 @@ public class PageTemplate
     private static final String UNABLE_PROCESS = "Content-Type类型是无法处理的请求类型,请看一下请求头的信息,(可以联系管理员反馈一下问题，以便下个版本更新)";
 
 
-    public FullHttpResponse get_GetBodyAccessDenied_Template()
-    {
+    public FullHttpResponse get_GetBodyAccessDenied_Template() {
         return createTemplate(GET_BODY_ACCESS_DENIED, GET_BODY_ACCESS_DENIED, HttpResponseStatus.FORBIDDEN);
     }
 
-    public FullHttpResponse get_NotFound_Template()
-    {
+    public FullHttpResponse get_NotFound_Template() {
         return createTemplate(NOT_FOUND, NOT_FOUND, HttpResponseStatus.NOT_FOUND);
     }
 
-    public FullHttpResponse get_ServiceUnavailable_Template()
-    {
+    public FullHttpResponse get_ServiceUnavailable_Template() {
         return createTemplate(SERVICE_UNAVAILABLE, SERVICE_UNAVAILABLE, HttpResponseStatus.SERVICE_UNAVAILABLE);
     }
 
-    public FullHttpResponse get_UnableProcess_Template()
-    {
+    public FullHttpResponse get_UnableProcess_Template() {
         return createTemplate(UNABLE_PROCESS, UNABLE_PROCESS, HttpResponseStatus.PRECONDITION_FAILED);
     }
 
-    public FullHttpResponse createTemplate(String title, String msg, HttpResponseStatus responseStatus)
-    {
+    public FullHttpResponse createTemplate(String title, String msg, HttpResponseStatus responseStatus) {
         String template = "<html><head><title>" + title + "</title></head>\n" +
                 "<body bgcolor=\"white\">\n" +
                 "<center><h1>" + msg + "</h1></center>\n" +

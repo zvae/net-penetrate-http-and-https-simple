@@ -22,20 +22,17 @@ import java.util.List;
 @Slf4j
 @Register
 @Recognizer
-public class HandshakePipeline implements Func<ServicePipeline, Boolean>
-{
+public class HandshakePipeline implements Func<ServicePipeline, Boolean> {
     @Autowired
     private ConnectManager connectManager;
     @Autowired
     private Config config;
 
     @Override
-    public Boolean func(ServicePipeline servicePipeline)
-    {
+    public Boolean func(ServicePipeline servicePipeline) {
         Object msg = servicePipeline.getMsg();
         ChannelHandlerContext channelHandlerContext = servicePipeline.getChannelHandlerContext();
-        if (msg instanceof Handshake)
-        {
+        if (msg instanceof Handshake) {
             Handshake handshake = (Handshake) msg;
             VersionInfo versionInfo = config.getVersionInfo();
             HandshakeResult handshakeResult = new HandshakeResult();
@@ -43,22 +40,15 @@ public class HandshakePipeline implements Func<ServicePipeline, Boolean>
             handshakeResult.setFailMessages(messages);
             boolean success;
 
-            if (!versionInfo.getVersion().equals(handshake.getVersion()))
-            {
-                for (int i = 0; i < versionInfo.getContents().size(); i++)
-                {
+            if (!versionInfo.getVersion().equals(handshake.getVersion())) {
+                for (int i = 0; i < versionInfo.getContents().size(); i++) {
                     messages.add(versionInfo.getContents().getString(i));
                 }
-            }
-            else
-            {
-                if (connectManager.isExist(handshake.getCustomDomainName()))
-                {
+            } else {
+                if (connectManager.isExist(handshake.getCustomDomainName())) {
                     //映射名称已经存在
                     messages.add("域名已被别人使用 [" + handshake.getCustomDomainName() + "]");
-                }
-                else
-                {
+                } else {
                     ConnectHandler connectHandler = connectManager.get(channelHandlerContext.channel().id());
                     connectHandler.setCustomDomainName(handshake.getCustomDomainName());
                     messages.add("访问域名: " + HypertextTransferProtocolType.HTTP.code + "://" + handshake.getCustomDomainName() + ":" + config.getHttpPort());

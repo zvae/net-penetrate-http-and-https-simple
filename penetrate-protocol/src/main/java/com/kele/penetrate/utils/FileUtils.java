@@ -8,8 +8,7 @@ import java.nio.charset.StandardCharsets;
 
 @SuppressWarnings("unused")
 @Recognizer
-public class FileUtils
-{
+public class FileUtils {
     /**
      * 根目录
      */
@@ -25,26 +24,20 @@ public class FileUtils
      * @param path     路径
      * @param fileName 文件名称
      */
-    public void writeLocalStr(String str, String path, String fileName)
-    {
-        try
-        {
+    public void writeLocalStr(String str, String path, String fileName) {
+        try {
             File file = new File(path + "/" + fileName);
-            if (!file.exists())
-            {
+            if (!file.exists()) {
                 boolean mkdirs = file.createNewFile();
             }
 
-            if (str != null && !"".equals(str))
-            {
+            if (str != null && !"".equals(str)) {
                 FileWriter fw = new FileWriter(file);
                 fw.write(str);
                 fw.flush();
                 fw.close();
             }
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -55,44 +48,31 @@ public class FileUtils
      * @param filePath 文件路径
      * @return 结果
      */
-    public String readFileStr(String filePath)
-    {
+    public String readFileStr(String filePath) {
         BufferedReader bf = null;
         StringBuilder buffer = null;
-        try
-        {
+        try {
             File file = new File(filePath);
-            if (file.exists())
-            {
+            if (file.exists()) {
                 buffer = new StringBuilder();
                 bf = new BufferedReader(new FileReader(filePath));
                 String data;
-                while ((data = bf.readLine()) != null)
-                {//使用readLine方法，一次读一行
+                while ((data = bf.readLine()) != null) {//使用readLine方法，一次读一行
                     buffer.append(data);
                 }
             }
-        }
-        catch (Exception ex)
-        {
+        } catch (Exception ex) {
             ex.printStackTrace();
-        }
-        finally
-        {
-            try
-            {
-                if (bf != null)
-                {
+        } finally {
+            try {
+                if (bf != null) {
                     bf.close();
                 }
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        if (buffer == null)
-        {
+        if (buffer == null) {
             return null;
         }
         return buffer.toString();
@@ -104,63 +84,44 @@ public class FileUtils
      * @param fileInputStream 流
      * @return 结果
      */
-    public String getDataFromFile(InputStream fileInputStream)
-    {
+    public String getDataFromFile(InputStream fileInputStream) {
         BufferedReader reader = null;
         StringBuilder latest = new StringBuilder();
         InputStreamReader inputStreamReader = null;
-        try
-        {
+        try {
             assert fileInputStream != null;
             inputStreamReader = new InputStreamReader(fileInputStream, StandardCharsets.UTF_8);
             reader = new BufferedReader(inputStreamReader);
             String tempString;
-            while ((tempString = reader.readLine()) != null)
-            {
+            while ((tempString = reader.readLine()) != null) {
                 latest.append(tempString);
             }
             inputStreamReader.close();
             fileInputStream.close();
             reader.close();
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
-        }
-        finally
-        {
-            if (reader != null)
-            {
-                try
-                {
+        } finally {
+            if (reader != null) {
+                try {
                     reader.close();
-                }
-                catch (IOException e)
-                {
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
 
-            if (inputStreamReader != null)
-            {
-                try
-                {
+            if (inputStreamReader != null) {
+                try {
                     inputStreamReader.close();
-                }
-                catch (IOException e)
-                {
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
 
-            if (fileInputStream != null)
-            {
-                try
-                {
+            if (fileInputStream != null) {
+                try {
                     fileInputStream.close();
-                }
-                catch (IOException e)
-                {
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }

@@ -15,18 +15,15 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Register
 @Recognizer
-public class CancelPipeline implements Func<ServicePipeline, Boolean>
-{
+public class CancelPipeline implements Func<ServicePipeline, Boolean> {
     @Autowired
     private ConnectManager connectManager;
 
     @Override
-    public Boolean func(ServicePipeline servicePipeline)
-    {
+    public Boolean func(ServicePipeline servicePipeline) {
         Object msg = servicePipeline.getMsg();
         ChannelHandlerContext channelHandlerContext = servicePipeline.getChannelHandlerContext();
-        if (msg instanceof Cancel)
-        {
+        if (msg instanceof Cancel) {
             connectManager.get(channelHandlerContext.channel().id()).setCustomDomainName(null);
             channelHandlerContext.writeAndFlush(new CancelResult());
             return true;

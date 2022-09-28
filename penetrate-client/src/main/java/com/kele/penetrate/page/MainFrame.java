@@ -26,8 +26,7 @@ import java.util.List;
 @Recognizer
 @Data
 @SuppressWarnings("unused")
-public class MainFrame extends JFrame
-{
+public class MainFrame extends JFrame {
     //<editor-fold desc="属性">
     private JPanel upPanel;
     private JPanel downPanel;
@@ -59,11 +58,9 @@ public class MainFrame extends JFrame
     //</editor-fold>
 
     //<editor-fold desc="构造">
-    public MainFrame() throws HeadlessException
-    {
+    public MainFrame() throws HeadlessException {
         //<editor-fold desc="判断系统修改页面尺寸">
-        if (System.getProperty("os.name").toLowerCase().contains("windows"))
-        {
+        if (System.getProperty("os.name").toLowerCase().contains("windows")) {
             changeWidth = 16;
             changeHeight = 6;
         }
@@ -80,8 +77,7 @@ public class MainFrame extends JFrame
     //</editor-fold>
 
     //<editor-fold desc="初始化">
-    public void init()
-    {
+    public void init() {
         createUpPanel();
         createDownPanel();
         setVisible(true);
@@ -89,31 +85,25 @@ public class MainFrame extends JFrame
     //</editor-fold>
 
     //<editor-fold desc="对属性操作的方法">
-    public String getIp()
-    {
+    public String getIp() {
         return ipTextField.getText();
     }
 
-    public String getPort()
-    {
+    public String getPort() {
         return portTextField.getText();
     }
 
-    public String getCustomDomainName()
-    {
+    public String getCustomDomainName() {
         return customDomainNameTextField.getText();
     }
 
-    public Boolean isAutoStart()
-    {
+    public Boolean isAutoStart() {
         return autoStartRadioButton.isSelected();
     }
 
-    public void setLogTextArea(List<ClientLogPageManager.LogInfo> logList)
-    {
+    public void setLogTextArea(List<ClientLogPageManager.LogInfo> logList) {
         StringBuilder builder = new StringBuilder();
-        for (ClientLogPageManager.LogInfo logInfo : logList)
-        {
+        for (ClientLogPageManager.LogInfo logInfo : logList) {
             builder.append(logInfo.getTime()).append(" - ").append(logInfo.getMsg()).append("\r\n");
         }
         logTextArea.setText(builder.toString());
@@ -122,8 +112,7 @@ public class MainFrame extends JFrame
     //</editor-fold>
 
     //<editor-fold desc="设置是否可以编辑">
-    public void setAllEditable(boolean isEditable)
-    {
+    public void setAllEditable(boolean isEditable) {
         customDomainNameTextField.setEditable(isEditable);
         portTextField.setEditable(isEditable);
         ipTextField.setEditable(isEditable);
@@ -133,8 +122,7 @@ public class MainFrame extends JFrame
     //</editor-fold>
 
     //<editor-fold desc="创建上面面板">
-    private void createUpPanel()
-    {
+    private void createUpPanel() {
         Font font = new Font("宋体", Font.PLAIN, 12);
 
         //<editor-fold desc="系统默认配置">
@@ -146,21 +134,16 @@ public class MainFrame extends JFrame
 
         //<editor-fold desc="读取本地配置">
         String recordOperationStr = fileUtils.readFileStr(fileUtils.rootDirectory + "/" + fileUtils.recordOperation);
-        if (recordOperationStr != null)
-        {
-            try
-            {
+        if (recordOperationStr != null) {
+            try {
                 JSONObject recordOperationJson = JSONObject.parseObject(recordOperationStr);
-                if (recordOperationJson.containsKey("customDomainName") && recordOperationJson.containsKey("isAutoStart") && recordOperationJson.containsKey("ip") && recordOperationJson.containsKey("port"))
-                {
+                if (recordOperationJson.containsKey("customDomainName") && recordOperationJson.containsKey("isAutoStart") && recordOperationJson.containsKey("ip") && recordOperationJson.containsKey("port")) {
                     customDomainName = recordOperationJson.getString("customDomainName");
                     isAutoStart = recordOperationJson.getBoolean("isAutoStart");
                     ipDefault = recordOperationJson.getString("ip");
                     portDefault = recordOperationJson.getString("port");
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 ex.printStackTrace();
             }
         }
@@ -242,8 +225,7 @@ public class MainFrame extends JFrame
     //</editor-fold>
 
     //<editor-fold desc="创建下面面板">
-    private void createDownPanel()
-    {
+    private void createDownPanel() {
         downPanel = new JPanel();
         downPanel.setLayout(null);
         downPanel.setBounds(15, 135, 500, 220);
@@ -270,64 +252,55 @@ public class MainFrame extends JFrame
     //</editor-fold>
 
     //<editor-fold desc="启动点击处理">
-    public void startButtonClickHandle(ActionEvent event)
-    {
+    public void startButtonClickHandle(ActionEvent event) {
         setAllEditable(false);
         String butText = runButton.getText();
 
-        if ("启动".equals(butText))
-        {
+        if ("启动".equals(butText)) {
             String customDomainName = getCustomDomainName();
             String ip = getIp();
             String port = getPort();
             boolean isAutoStart = isAutoStart();
-            if (!connectHandler.isConnect())
-            {
+            if (!connectHandler.isConnect()) {
                 clientLogPageManager.addLog("未与服务器链接，请稍后重试...");
                 setAllEditable(true);
                 return;
             }
 
-            if (!checkUtils.checkDomainName(customDomainName))
-            {
+            if (!checkUtils.checkDomainName(customDomainName)) {
                 clientLogPageManager.addLog("请二级域名是否正确(不能含有特殊字符(不包含.)，不能为空)");
                 setAllEditable(true);
                 return;
             }
 
             customDomainName = customDomainName.trim();
-            if (customDomainName.length() < 1 || customDomainName.length() > 30)
-            {
+            if (customDomainName.length() < 1 || customDomainName.length() > 30) {
                 clientLogPageManager.addLog("检查二级域名长度(长度>0,长度<=30)");
                 setAllEditable(true);
                 return;
             }
 
-            if (!checkUtils.checkPort(port))
-            {
+            if (!checkUtils.checkPort(port)) {
                 clientLogPageManager.addLog("请检查端口是否正确");
                 setAllEditable(true);
                 return;
             }
 
             port = port.trim();
-            if (port.length() < 1 || port.length() > 9)
-            {
+            if (port.length() < 1 || port.length() > 9) {
                 clientLogPageManager.addLog("检查端口长度(长度>0,长度<9)");
                 setAllEditable(true);
                 return;
             }
 
-            if (!checkUtils.checkIp(ip))
-            {
+            if (!checkUtils.checkIp(ip)) {
                 clientLogPageManager.addLog("ip地址不能为空");
                 setAllEditable(true);
                 return;
             }
 
             ip = ip.trim();
-            if (ip.length() < 1 || ip.length() > 50)
-            {
+            if (ip.length() < 1 || ip.length() > 50) {
                 clientLogPageManager.addLog("检查IP长度(长度>0,长度<=50)");
                 setAllEditable(true);
                 return;
@@ -339,12 +312,9 @@ public class MainFrame extends JFrame
             connectHandler.setHandshake(handshake);
             connectHandler.send(handshake);
             clientLogPageManager.addLog("发送启动请求");
-        }
-        else
-        {
+        } else {
             setAllEditable(false);
-            if (connectHandler.getChannel() == null || !connectHandler.getChannel().isActive())
-            {
+            if (connectHandler.getChannel() == null || !connectHandler.getChannel().isActive()) {
                 clientLogPageManager.addLog("未与服务器链接，请稍后重试...");
                 runButton.setEnabled(true);
                 return;

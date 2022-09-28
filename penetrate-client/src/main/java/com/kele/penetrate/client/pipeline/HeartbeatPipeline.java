@@ -12,16 +12,13 @@ import lombok.extern.slf4j.Slf4j;
 @SuppressWarnings("unused")
 @Recognizer
 @Register
-public class HeartbeatPipeline implements Func<Object, Boolean>
-{
+public class HeartbeatPipeline implements Func<Object, Boolean> {
     @Autowired
     private ConnectHandler connectHandler;
 
     @Override
-    public Boolean func(Object msg)
-    {
-        if (msg instanceof Heartbeat)
-        {
+    public Boolean func(Object msg) {
+        if (msg instanceof Heartbeat) {
             connectHandler.send(msg);
             return true;
         }

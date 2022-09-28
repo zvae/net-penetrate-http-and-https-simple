@@ -22,60 +22,45 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Register
 @Recognizer
-public class RequestResultPipeline implements Func<ServicePipeline, Boolean>
-{
+public class RequestResultPipeline implements Func<ServicePipeline, Boolean> {
     @Autowired
     private ConnectManager connectManager;
     @Autowired
     private PageTemplate pageTemplate;
 
     @Override
-    public Boolean func(ServicePipeline servicePipeline)
-    {
+    public Boolean func(ServicePipeline servicePipeline) {
         Object msg = servicePipeline.getMsg();
         ChannelHandlerContext channelHandlerContext = servicePipeline.getChannelHandlerContext();
 
-        if (msg instanceof RequestResult)
-        {
+        if (msg instanceof RequestResult) {
             RequestResult requestResult = (RequestResult) msg;
             ConnectManager.MessageManager recordMsg = connectManager.getRecordMessage(requestResult.getRequestId());
-            if (requestResult.isSuccess())
-            {
+            if (requestResult.isSuccess()) {
                 FullHttpResponse responseSuccess;
 
-                if (requestResult.getData() != null && requestResult.getData().length > 104857600)
-                {
+                if (requestResult.getData() != null && requestResult.getData().length > 104857600) {
 
                     FullHttpResponse responseFail = pageTemplate.createTemplate("数据过大", "数据过大", new HttpResponseStatus(413, "数据过大"));
                     recordMsg.getChannelHandlerContext().writeAndFlush(responseFail).addListener(ChannelFutureListener.CLOSE);
-                }
-                else
-                {
-                    if (requestResult.getData() != null)
-                    {
+                } else {
+                    if (requestResult.getData() != null) {
                         responseSuccess = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, new HttpResponseStatus(requestResult.getCode(), ""), Unpooled.copiedBuffer(requestResult.getData()));
-                    }
-                    else
-                    {
+                    } else {
                         responseSuccess = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, new HttpResponseStatus(requestResult.getCode(), ""));
                     }
 
-                    if (requestResult.getHeaders() != null)
-                    {
+                    if (requestResult.getHeaders() != null) {
                         requestResult.getHeaders().forEach((k, v) ->
                                 responseSuccess.headers().set(k, v));
                     }
 
-                    if (recordMsg != null && recordMsg.getChannelHandlerContext() != null)
-                    {
+                    if (recordMsg != null && recordMsg.getChannelHandlerContext() != null) {
                         recordMsg.getChannelHandlerContext().writeAndFlush(responseSuccess).addListener(ChannelFutureListener.CLOSE);
                     }
                 }
-            }
-            else
-            {
-                if (recordMsg != null && recordMsg.getChannelHandlerContext() != null)
-                {
+            } else {
+                if (recordMsg != null && recordMsg.getChannelHandlerContext() != null) {
                     FullHttpResponse responseFail = pageTemplate.createTemplate(requestResult.getFailMessage(), requestResult.getFailMessage(), new HttpResponseStatus(requestResult.getCode(), requestResult.getFailMessage()));
                     recordMsg.getChannelHandlerContext().writeAndFlush(responseFail).addListener(ChannelFutureListener.CLOSE);
                 }

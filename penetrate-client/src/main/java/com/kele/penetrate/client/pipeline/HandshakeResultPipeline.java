@@ -15,8 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 @SuppressWarnings("unused")
 @Register
 @Recognizer
-public class HandshakeResultPipeline implements Func<Object, Boolean>
-{
+public class HandshakeResultPipeline implements Func<Object, Boolean> {
     @Autowired
     private ClientLogPageManager clientLogPageManager;
     @Autowired
@@ -25,13 +24,10 @@ public class HandshakeResultPipeline implements Func<Object, Boolean>
     private FileUtils fileUtils;
 
     @Override
-    public Boolean func(Object msg)
-    {
-        if (msg instanceof HandshakeResult)
-        {
+    public Boolean func(Object msg) {
+        if (msg instanceof HandshakeResult) {
             HandshakeResult handshakeResult = (HandshakeResult) msg;
-            if (handshakeResult.isSuccess())
-            {
+            if (handshakeResult.isSuccess()) {
                 clientLogPageManager.addLog("启动成功 :");
                 clientLogPageManager.addLog(handshakeResult.getFailMessages());
                 mainFrame.getRunButton().setText("暂停");
@@ -43,9 +39,7 @@ public class HandshakeResultPipeline implements Func<Object, Boolean>
                 recordOperationJson.put("ip", mainFrame.getIp());
                 recordOperationJson.put("port", mainFrame.getPort());
                 fileUtils.writeLocalStr(recordOperationJson.toJSONString(), fileUtils.rootDirectory, fileUtils.recordOperation);
-            }
-            else
-            {
+            } else {
                 clientLogPageManager.addLog("启动失败 :");
                 mainFrame.getRunButton().setText("启动");
                 clientLogPageManager.addLog(handshakeResult.getFailMessages());

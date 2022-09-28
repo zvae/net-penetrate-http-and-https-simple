@@ -15,14 +15,12 @@ import lombok.extern.slf4j.Slf4j;
 @Recognizer
 @Slf4j
 @SuppressWarnings("unused")
-public class Start
-{
+public class Start {
     private static final BeanFactoryImpl beanFactory;
     public static final Events<Object> clientEvents;
 
     //<editor-fold desc="初始化">
-    static
-    {
+    static {
         beanFactory = BeanFactoryImpl.getInstance("com.kele.penetrate");
         clientEvents = new Events<>("Client", Object.class, "com.kele.penetrate.client.pipeline");
     }
@@ -39,16 +37,14 @@ public class Start
     @Autowired
     private ClientLogPageManager clientLogPageManager;
 
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         Start start = BeanFactoryImpl.getBean(Start.class);
         start.mainFrame.init();
         start.clientLogPageManager.addLog("github上给个小星星鼓励一下吧～");
         start.clientLogPageManager.addLog("当前版本" + start.config.getVersion());
         start.clientLogPageManager.addLog("如有问题可以联系V:1049705180,QQ群:704592910");
         start.clientLogPageManager.addLog("下载地址:https://github.com/LiangXiaoWei1024/net-penetrate-http-and-https-simple");
-        if (start.mainFrame.isAutoStart())
-        {
+        if (start.mainFrame.isAutoStart()) {
             start.clientLogPageManager.addLog("连接成功后自动启动～");
         }
         start.connectHandler.start();

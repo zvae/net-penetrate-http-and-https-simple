@@ -13,14 +13,12 @@ import java.util.Properties;
 @Data
 @Recognizer
 @SuppressWarnings("unused")
-public class Config
-{
+public class Config {
     private final ServiceConnectInfo serviceConnectInfo = new ServiceConnectInfo();
     private String version;
     private String domainName;
 
-    public Config() throws IOException
-    {
+    public Config() throws IOException {
         Properties properties = new Properties();
         properties.load(new BufferedReader(new InputStreamReader(Objects.requireNonNull(Config.class.getClassLoader().getResourceAsStream("config.properties")))));
         this.version = properties.getProperty("version");

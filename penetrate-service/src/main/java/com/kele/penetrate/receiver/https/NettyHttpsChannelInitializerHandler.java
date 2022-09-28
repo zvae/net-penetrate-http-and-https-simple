@@ -14,16 +14,14 @@ import javax.net.ssl.SSLEngine;
 
 @SuppressWarnings("unused")
 @Recognizer
-public class NettyHttpsChannelInitializerHandler extends ChannelInitializer<SocketChannel>
-{
+public class NettyHttpsChannelInitializerHandler extends ChannelInitializer<SocketChannel> {
     @Autowired
     private NettyHttpsServerHandler nettyHttpsServerHandler;
     @Autowired
     private SSLContextFactory sslContextFactory;
 
     @Override
-    protected void initChannel(SocketChannel socketChannel) throws Exception
-    {
+    protected void initChannel(SocketChannel socketChannel) throws Exception {
         //<editor-fold desc="生成本地证书(注释)">
 //        SelfSignedCertificate certificate = new SelfSignedCertificate();
 //        SslContext sslContext = SslContextBuilder.forServer(certificate.certificate(), certificate.privateKey()).build();

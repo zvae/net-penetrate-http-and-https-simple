@@ -8,9 +8,8 @@ import java.util.Map;
 
 @Data
 @SuppressWarnings("unused")
-public class MultipartBody
-{
-    private Map<String,String> bodyMap;
+public class MultipartBody {
+    private Map<String, String> bodyMap;
     private List<RequestFile> bodyFiles;
 
 }

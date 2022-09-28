@@ -7,8 +7,7 @@ import lombok.Data;
  */
 @Data
 @SuppressWarnings("unused")
-public class ServiceConnectInfo
-{
+public class ServiceConnectInfo {
     private String ip;
     private Integer port;
 }

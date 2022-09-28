@@ -7,7 +7,6 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Register
-{
+public @interface Register {
     int value() default 0;
 }

@@ -6,8 +6,7 @@ import java.io.Serializable;
 
 @Data
 @SuppressWarnings("unused")
-public class Handshake implements Serializable
-{
+public class Handshake implements Serializable {
     private String customDomainName;
     private String version;
 }

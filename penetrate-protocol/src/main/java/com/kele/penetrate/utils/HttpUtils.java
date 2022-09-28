@@ -25,14 +25,12 @@ import java.util.concurrent.TimeUnit;
 @SuppressWarnings("unused")
 @Slf4j
 @Recognizer
-public class HttpUtils
-{
+public class HttpUtils {
     private static final OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
     private final OkHttpClient client;
     private final X509TrustManager manager = SSLSocketClientUtil.getX509TrustManager();
 
-    public HttpUtils()
-    {
+    public HttpUtils() {
         //设置超时时间
         clientBuilder.connectTimeout(10, TimeUnit.SECONDS);
         clientBuilder.readTimeout(60, TimeUnit.SECONDS);
@@ -43,16 +41,12 @@ public class HttpUtils
     }
 
     //<editor-fold desc="Not Body">
-    public void requestNotBody(RequestType requestType, String url, Map<String, String> headers, Action1<RequestResult> action1)
-    {
+    public void requestNotBody(RequestType requestType, String url, Map<String, String> headers, Action1<RequestResult> action1) {
         Request.Builder requestBuilder = new Request.Builder();
         requestBuilder.url(url);
-        if (requestType == RequestType.GET)
-        {
+        if (requestType == RequestType.GET) {
             requestBuilder.get();
-        }
-        else
-        {
+        } else {
             requestBuilder.method(requestType.code, RequestBody.create("", null));
         }
         headers.forEach(requestBuilder::addHeader);
@@ -61,8 +55,7 @@ public class HttpUtils
     //</editor-fold>
 
     //<editor-fold desc="Form Body">
-    public void requestFormBody(RequestType requestType, String url, Map<String, String> headers, Map<String, String> formBody, Action1<RequestResult> action1)
-    {
+    public void requestFormBody(RequestType requestType, String url, Map<String, String> headers, Map<String, String> formBody, Action1<RequestResult> action1) {
         FormBody.Builder formBodyBuilder = new FormBody.Builder();
         formBody.forEach(formBodyBuilder::add);
         Request.Builder requestBuilder = new Request.Builder();
@@ -74,8 +67,7 @@ public class HttpUtils
     //</editor-fold>
 
     //<editor-fold desc="Form Text">
-    public void requestTextBody(RequestType requestType, String url, Map<String, String> headers, String textBody, Action1<RequestResult> action1)
-    {
+    public void requestTextBody(RequestType requestType, String url, Map<String, String> headers, String textBody, Action1<RequestResult> action1) {
         RequestBody body = RequestBody.create(textBody, MediaType.parse(headers.get("Content-Type")));
         Request.Builder requestBuilder = new Request.Builder();
         requestBuilder.url(url);
@@ -86,16 +78,13 @@ public class HttpUtils
     //</editor-fold>
 
     //<editor-fold desc="Form Multipart">
-    public void requestMultipartBody(RequestType requestType, String url, Map<String, String> headers, Map<String, String> bodyMap, List<RequestFile> bodyFiles, Action1<RequestResult> action1)
-    {
+    public void requestMultipartBody(RequestType requestType, String url, Map<String, String> headers, Map<String, String> bodyMap, List<RequestFile> bodyFiles, Action1<RequestResult> action1) {
         MultipartBody.Builder multipartBodyBuilder = new MultipartBody.Builder();
         multipartBodyBuilder.setType(MultipartBody.FORM);
         bodyMap.forEach(multipartBodyBuilder::addFormDataPart);
 
-        if (bodyFiles != null)
-        {
-            for (RequestFile requestFile : bodyFiles)
-            {
+        if (bodyFiles != null) {
+            for (RequestFile requestFile : bodyFiles) {
                 multipartBodyBuilder.addFormDataPart(requestFile.getName(), requestFile.getFileName(), RequestBody.create(requestFile.getFileByte(), MediaType.parse("multipart/form-data")));
             }
         }
@@ -109,19 +98,15 @@ public class HttpUtils
     //</editor-fold>
 
     //<editor-fold desc="执行">
-    private void execute(Request request, Action1<RequestResult> action1)
-    {
-        client.newCall(request).enqueue(new Callback()
-        {
+    private void execute(Request request, Action1<RequestResult> action1) {
+        client.newCall(request).enqueue(new Callback() {
             @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e)
-            {
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 failResultHandle(e, action1);
             }
 
             @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response)
-            {
+            public void onResponse(@NotNull Call call, @NotNull Response response) {
                 successResultHandle(response, action1);
             }
         });
@@ -129,47 +114,35 @@ public class HttpUtils
     //</editor-fold>
 
     //<editor-fold desc="数据处理">
-    private void successResultHandle(Response response, Action1<RequestResult> action1)
-    {
+    private void successResultHandle(Response response, Action1<RequestResult> action1) {
         Response priorResponse = response.priorResponse();
         RequestResult requestResult = new RequestResult();
         Response resultResponse = null;
 
-        if (priorResponse != null)
-        {
+        if (priorResponse != null) {
             int priorResponseCode = priorResponse.code();
-            if (priorResponseCode == HttpURLConnection.HTTP_MOVED_PERM || priorResponseCode == HttpURLConnection.HTTP_MOVED_TEMP)
-            {
+            if (priorResponseCode == HttpURLConnection.HTTP_MOVED_PERM || priorResponseCode == HttpURLConnection.HTTP_MOVED_TEMP) {
                 resultResponse = priorResponse;
             }
-        }
-        else
-        {
+        } else {
             resultResponse = response;
-            try
-            {
+            try {
                 byte[] bytes = Objects.requireNonNull(response.body()).bytes();
                 requestResult.setData(bytes);
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 log.error("获取数据异常", e);
             }
         }
 
-        if (resultResponse != null)
-        {
+        if (resultResponse != null) {
             requestResult.setCode(resultResponse.code());
             requestResult.setSuccess(true);
             Map<String, String> headers = new HashMap<>();
-            if (requestResult.getData() != null && requestResult.getData().length > 104857600)
-            {
+            if (requestResult.getData() != null && requestResult.getData().length > 104857600) {
                 requestResult.setData("数据过大".getBytes(StandardCharsets.UTF_8));
                 headers.put("Content-Length", "" + requestResult.getData().length);
                 headers.put("Content-Type", "text/html;charset=UTF-8");
-            }
-            else
-            {
+            } else {
                 resultResponse.headers().forEach(pair -> headers.put(pair.getFirst(), pair.getSecond()));
             }
             requestResult.setHeaders(headers);
@@ -177,29 +150,20 @@ public class HttpUtils
         action1.action(requestResult);
     }
 
-    private void failResultHandle(IOException exception, Action1<RequestResult> action1)
-    {
+    private void failResultHandle(IOException exception, Action1<RequestResult> action1) {
         RequestResult requestResult = new RequestResult();
 
-        if (exception != null)
-        {
+        if (exception != null) {
             requestResult.setFailMessage(exception.getMessage());
-            if (exception instanceof ConnectException)
-            {
+            if (exception instanceof ConnectException) {
                 requestResult.setCode(504);
-            }
-            else if (exception instanceof SocketTimeoutException)
-            {
+            } else if (exception instanceof SocketTimeoutException) {
                 requestResult.setFailMessage(exception.getMessage());
                 requestResult.setCode(408);
-            }
-            else
-            {
+            } else {
                 requestResult.setCode(0);
             }
-        }
-        else
-        {
+        } else {
             requestResult.setFailMessage("Unknown exception");
             requestResult.setCode(0);
         }

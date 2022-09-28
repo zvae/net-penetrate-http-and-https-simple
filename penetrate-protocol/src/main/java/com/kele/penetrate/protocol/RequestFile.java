@@ -6,8 +6,7 @@ import java.io.Serializable;
 
 @Data
 @SuppressWarnings("unused")
-public class RequestFile implements Serializable
-{
+public class RequestFile implements Serializable {
     private String name;
     private String fileName;
     private byte[] fileByte;
